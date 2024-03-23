@@ -4,6 +4,7 @@ import com.hoebro.entity.entity.WoodenHoe;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -100,7 +101,6 @@ public class HarvestAndDeliverCropGoal extends Goal
         }
     }
 
-
     private List<ItemStack> determineCropDrops(BlockState cropState)
     {
         List<ItemStack> drops = new ArrayList<>();
@@ -138,21 +138,35 @@ public class HarvestAndDeliverCropGoal extends Goal
 
     private void deliverToPlayer(PlayerEntity player)
     {
-        // Approach player to deliver items
         this.hoeEntity.getNavigation().startMovingTo(player, this.speed);
         if (this.hoeEntity.squaredDistanceTo(player) < 2.0 && !itemsToDeliver.isEmpty())
         {
-            // Deliver items directly to player inventory
-            itemsToDeliver.forEach(stack ->
-            {
-                player.giveItemStack(stack);
-                // Play the item pick-up sound to all nearby players
-                this.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, player.getSoundCategory(), 1.0F, 1.0F);
-            });
-            itemsToDeliver.clear();
-            this.isDelivering = false;
+            if (!this.world.isClient)
+            { // Make sure we are on the server side
+                itemsToDeliver.forEach(stack ->
+                {
+                    ItemEntity itemEntity = new ItemEntity(this.world, this.hoeEntity.getX(), this.hoeEntity.getY(), this.hoeEntity.getZ(), stack);
+
+                    // Calculate direction to throw the item towards the player
+                    double dx = player.getX() - this.hoeEntity.getX();
+                    double dy = player.getY() - this.hoeEntity.getY();
+                    double dz = player.getZ() - this.hoeEntity.getZ();
+                    double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                    // Set motion to "throw" the item towards the player
+                    itemEntity.setVelocity(dx * 0.1 / distance, dy * 0.1 / distance + 0.3, dz * 0.1 / distance);
+
+                    this.world.spawnEntity(itemEntity); // Spawn the item entity in the world
+
+                    // Play the item pick-up sound to all nearby players
+                    this.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, player.getSoundCategory(), 1.0F, 1.0F);
+                });
+                itemsToDeliver.clear();
+                this.isDelivering = false;
+            }
         }
     }
+
 
 
     @Override
