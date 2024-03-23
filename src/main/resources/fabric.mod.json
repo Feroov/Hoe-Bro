@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "hoebro",
+	"version": "${version}",
+	"name": "Hoe Bro",
+	"description": "Hoe companions to help your farming chores",
+	"authors": [
+		"Feroov (a.k.a FRV)"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/hoebro/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.hoebro.HoeBro"
+		],
+		"client": [
+			"com.hoebro.HoeBroClient"
+		],
+		"fabric-datagen": [
+			"com.hoebro.HoeBroDataGenerator"
+		]
+	},
+	"mixins": [
+		"hoebro.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.7",
+		"minecraft": "~1.20.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
