@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "H": {
+      "item": "minecraft:wooden_hoe"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    },
+    "E": {
+      "item": "minecraft:egg"
+    }
+  },
+  "pattern": [
+    " H ",
+    "SES",
+    "SSS"
+  ],
+  "result": {
+    "item": "hoebro:wooden_hoe_spawn_egg"
+  }
+}

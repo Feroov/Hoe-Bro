@@ -1,6 +1,6 @@
 package com.hoebro.entity.entity;
 
-import com.hoebro.entity.ai.HarvestAndDeliverCropGoal;
+import com.hoebro.entity.ai.WoodenHoeHarvestAndDeliverCropGoal;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -13,15 +13,22 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
 
 public class WoodenHoe extends AmbientEntity
 {
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
+    private boolean deliverToChestMode = false;
 
     public WoodenHoe(EntityType<? extends AmbientEntity> entityType, World world)
     {
@@ -47,6 +54,46 @@ public class WoodenHoe extends AmbientEntity
 
     public boolean isBusy() { return this.getNavigation().isFollowingPath(); }
 
+    public boolean isDeliverToChestMode() { return deliverToChestMode; }
+
+    @Override
+    public ActionResult interactMob(PlayerEntity player, Hand hand)
+    {
+        if (!this.getWorld().isClient)
+        {
+            // This check ensures we're on the server side.
+            this.deliverToChestMode = !this.deliverToChestMode;
+
+            // Spawn the happy villager particle effect around the entity to notify the player
+            for (int i = 0; i < 10; i++)
+            {
+                double d0 = this.random.nextGaussian() * 0.02D;
+                double d1 = this.random.nextGaussian() * 0.02D;
+                double d2 = this.random.nextGaussian() * 0.02D;
+                // This method call should cause particles to appear on the client side.
+                ((ServerWorld) this.getWorld()).spawnParticles(ParticleTypes.HAPPY_VILLAGER,
+                        this.getX(), this.getBodyY(0.5D), this.getZ(),
+                        1, d0, d1, d2, 0.0D);
+            }
+
+            // Play the item pick-up sound to notify the player
+            this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(),
+                    SoundEvents.ENTITY_ITEM_PICKUP, this.getSoundCategory(), 1.0F, 1.0F);
+
+            // Let the player know the delivery mode has changed with a chat message (optional)
+            if (this.deliverToChestMode)
+            {
+                player.sendMessage(Text.translatable("Deliver to Chest"), true);
+            }
+            else
+            {
+                player.sendMessage(Text.translatable("Deliver to Player"), true);
+            }
+            return ActionResult.SUCCESS;
+        }
+        return ActionResult.CONSUME;
+    }
+
     @Override
     public void tick()
     {
@@ -58,7 +105,7 @@ public class WoodenHoe extends AmbientEntity
     protected void initGoals()
     {
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new HarvestAndDeliverCropGoal(this, 1.0f));
+        this.goalSelector.add(1, new WoodenHoeHarvestAndDeliverCropGoal(this, 1.0f, 15));
         this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
         this.goalSelector.add(6, new LookAroundGoal(this));
     }
@@ -73,17 +120,9 @@ public class WoodenHoe extends AmbientEntity
 
     @Nullable
     @Override
-    protected SoundEvent getAmbientSound()
-    {
-        this.playSound(SoundEvents.BLOCK_WOOD_PLACE, 1.0F, 2.0F);
-        return null;
-    }
-
-    @Nullable
-    @Override
     protected SoundEvent getHurtSound(DamageSource source)
     {
-        this.playSound(SoundEvents.BLOCK_BAMBOO_WOOD_BREAK, 1.0F, 2.0F);
+        this.playSound(SoundEvents.BLOCK_BAMBOO_WOOD_BREAK, 1.0F, 1.2F);
         return null;
     }
 
@@ -91,7 +130,7 @@ public class WoodenHoe extends AmbientEntity
     @Override
     protected SoundEvent getDeathSound()
     {
-        this.playSound(SoundEvents.ENTITY_WITHER_SKELETON_DEATH, 1.0F, 2.0F);
+        this.playSound(SoundEvents.ENTITY_WITHER_SKELETON_DEATH, 1.0F, 1.4F);
         return null;
     }
 }
