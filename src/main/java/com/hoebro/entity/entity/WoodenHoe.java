@@ -105,7 +105,7 @@ public class WoodenHoe extends AmbientEntity
     protected void initGoals()
     {
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new WoodenHoeHarvestAndDeliverCropGoal(this, 1.0f, 15));
+        this.goalSelector.add(1, new WoodenHoeHarvestAndDeliverCropGoal(this, 1.3f, 15));
         this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
         this.goalSelector.add(6, new LookAroundGoal(this));
     }
