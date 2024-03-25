@@ -7,12 +7,12 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class WoodenHoeModel<T extends WoodenHoe> extends SinglePartEntityModel<T>
+public class HoeModel<T extends WoodenHoe> extends SinglePartEntityModel<T>
 {
     private final ModelPart woodenhoe;
     private final ModelPart upperbody;
 
-    public WoodenHoeModel(ModelPart root)
+    public HoeModel(ModelPart root)
     {
         this.woodenhoe = root.getChild("woodenhoe");
         this.upperbody = woodenhoe.getChild("body").getChild("upperbody");

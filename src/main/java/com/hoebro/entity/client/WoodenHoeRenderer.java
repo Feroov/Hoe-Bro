@@ -8,13 +8,13 @@ import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-public class WoodenHoeRenderer extends MobEntityRenderer<WoodenHoe, WoodenHoeModel<WoodenHoe>>
+public class WoodenHoeRenderer extends MobEntityRenderer<WoodenHoe, HoeModel<WoodenHoe>>
 {
     private static final Identifier TEXTURE = new Identifier(HoeBro.MOD_ID, "textures/entity/wooden_hoe.png");
 
     public WoodenHoeRenderer(EntityRendererFactory.Context context)
     {
-        super(context, new WoodenHoeModel<>(context.getPart(HoeBroModelLayers.WOODENHOE)), 0.6f);
+        super(context, new HoeModel<>(context.getPart(HoeBroModelLayers.WOODENHOE)), 0.6f);
     }
 
     @Override

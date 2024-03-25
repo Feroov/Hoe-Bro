@@ -2,7 +2,7 @@ package com.hoebro;
 
 import com.hoebro.entity.HoeBroEntities;
 import com.hoebro.entity.client.HoeBroModelLayers;
-import com.hoebro.entity.client.WoodenHoeModel;
+import com.hoebro.entity.client.HoeModel;
 import com.hoebro.entity.client.WoodenHoeRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -14,6 +14,6 @@ public class HoeBroClient implements ClientModInitializer
     public void onInitializeClient()
     {
         EntityRendererRegistry.register(HoeBroEntities.WOODENHOE, WoodenHoeRenderer::new);
-        EntityModelLayerRegistry.registerModelLayer(HoeBroModelLayers.WOODENHOE, WoodenHoeModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(HoeBroModelLayers.WOODENHOE, HoeModel::getTexturedModelData);
     }
 }
