@@ -14,6 +14,7 @@ import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +23,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WoodenHoeHarvestAndDeliverCropGoal extends Goal
+public class HoeHarvestAndDeliverGoal extends Goal
 {
     private final WoodenHoe hoeEntity;
     private PlayerEntity nearestPlayer;
@@ -33,7 +34,7 @@ public class WoodenHoeHarvestAndDeliverCropGoal extends Goal
     private final List<ItemStack> itemsToDeliver = new ArrayList<>();
     private final int sightRange;
     private int harvestedCrops = 0;
-    private final int maxHarvestBeforeDeath = 30; // Maximum number of crops to harvest before "death"
+    private final int maxHarvestBeforeDeath = 30;
     private enum State
     {
         SEARCHING,
@@ -43,13 +44,17 @@ public class WoodenHoeHarvestAndDeliverCropGoal extends Goal
     }
     private State currentState = State.SEARCHING;
     private BlockPos nearestChestPos = null;
+    private BlockPos lastPos = null;
+    private int ticksStuck = 0;
+    private final int chestSightRange;
 
-    public WoodenHoeHarvestAndDeliverCropGoal(WoodenHoe hoeEntity, double speed, int sightRange)
+    public HoeHarvestAndDeliverGoal(WoodenHoe hoeEntity, double speed, int sightRange, int chestSightRange)
     {
         this.hoeEntity = hoeEntity;
         this.world = hoeEntity.getWorld();
         this.speed = speed;
         this.sightRange = sightRange;
+        this.chestSightRange = chestSightRange;
     }
 
     @Override
@@ -77,7 +82,7 @@ public class WoodenHoeHarvestAndDeliverCropGoal extends Goal
                     BlockState state = this.world.getBlockState(blockPos);
                     if (state.getBlock() instanceof CropBlock crop)
                     {
-                        if (crop.isMature(state)) { return blockPos; } // Return the position of the first found mature crop
+                        if (crop.isMature(state)) { return blockPos; }
                     }
                 }
             }
@@ -93,9 +98,30 @@ public class WoodenHoeHarvestAndDeliverCropGoal extends Goal
                 this.targetCropPos.getY(), this.targetCropPos.getZ(), this.speed);
     }
 
+    private boolean isStuck()
+    {
+        if (lastPos == null || lastPos.equals(hoeEntity.getBlockPos()))
+        {
+            ticksStuck++;
+        }
+        else { ticksStuck = 0; }
+        lastPos = hoeEntity.getBlockPos();
+
+        return ticksStuck > 40;
+    }
+
     @Override
     public void tick()
     {
+        if (isStuck())
+        {
+            // Reset AI state if entity is considered stuck
+            currentState = State.SEARCHING;
+            isDelivering = false;
+            nearestChestPos = null;
+            ticksStuck = 0; // Reset stuck counter
+        }
+
         // Perform actions based on the current state
         switch (currentState)
         {
@@ -193,30 +219,38 @@ public class WoodenHoeHarvestAndDeliverCropGoal extends Goal
         if (chestEntity instanceof ChestBlockEntity)
         {
             ChestBlockEntity chest = (ChestBlockEntity) chestEntity;
+            boolean allSlotsFull = true;
 
-            for (ItemStack stack : itemsToDeliver)
+            for (ItemStack stack : new ArrayList<>(itemsToDeliver))
             {
                 boolean itemDeposited = false;
 
                 // Try to stack with existing items first
-                for (int i = 0; i < chest.size(); i++)
+                for (int i = 0; i < chest.size() && !stack.isEmpty(); i++)
                 {
                     ItemStack existingStack = chest.getStack(i);
                     if (ItemStack.canCombine(existingStack, stack))
                     {
                         int transferAmount = Math.min(stack.getCount(), existingStack.getMaxCount() - existingStack.getCount());
-                        existingStack.increment(transferAmount);
-                        stack.decrement(transferAmount);
-                        itemDeposited = true;
-
-                        if (stack.isEmpty()) { break; }
+                        if (transferAmount > 0)
+                        {
+                            existingStack.increment(transferAmount);
+                            stack.decrement(transferAmount);
+                            itemDeposited = true;
+                            allSlotsFull = false; // There was at least one slot not completely full
+                            break; // Exit the loop once you've found a spot for your item
+                        }
+                    }
+                    else if (existingStack.isEmpty())
+                    {
+                        allSlotsFull = false; // There's at least one empty slot
                     }
                 }
 
                 // If stack is not empty, try to place it in an empty slot
                 if (!stack.isEmpty())
                 {
-                    for (int i = 0; i < chest.size(); i++)
+                    for (int i = 0; i < chest.size() && !stack.isEmpty(); i++)
                     {
                         if (chest.getStack(i).isEmpty())
                         {
@@ -228,18 +262,57 @@ public class WoodenHoeHarvestAndDeliverCropGoal extends Goal
                     }
                 }
 
-                // If item could not be deposited (chest is full), drop the item
-                if (!itemDeposited)
+                // If item could not be deposited (chest is full or no more of
+                // this item can be added), drop the item
+                if (!itemDeposited && (allSlotsFull || !stack.isEmpty()))
                 {
-                    ItemEntity itemEntity = new ItemEntity(this.world, nearestChestPos.getX() + 0.5,
-                            nearestChestPos.getY() + 1, nearestChestPos.getZ() + 0.5, stack);
-                    this.world.spawnEntity(itemEntity);
+                    forceDropItem(stack, nearestChestPos);
                 }
             }
 
-            itemsToDeliver.clear();
-            this.isDelivering = false;
-            this.currentState = State.SEARCHING;
+            if (!itemsToDeliver.isEmpty())
+            {
+                // Play the pop sound and show poof particle effects if items are delivered or dropped.
+                playDeliveryEffects(nearestChestPos);
+            }
+
+            itemsToDeliver.clear(); // Clear the delivery list after attempting to deposit or drop all items
+            this.isDelivering = false; // Reset delivery flag
+            this.currentState = State.SEARCHING; // Return to searching state
+        }
+    }
+
+    private void playDeliveryEffects(BlockPos pos)
+    {
+        if (!this.world.isClient)
+        {
+            ((ServerWorld)this.world).spawnParticles(ParticleTypes.POOF,
+                    pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, 3, 0, 0, 0, 0.02);
+        }
+
+        this.world.playSound(null, pos, SoundEvents.ENTITY_ITEM_PICKUP,
+                this.hoeEntity.getSoundCategory(), 0.5F, 1.0F);
+    }
+
+
+    private void forceDropItem(ItemStack stack, BlockPos dropPosition)
+    {
+        if (this.world instanceof ServerWorld)
+        {
+            if (!stack.isEmpty())
+            {
+                double x = dropPosition.getX() + 0.5;
+                double y = dropPosition.getY() + 1;
+                double z = dropPosition.getZ() + 0.5;
+
+                ItemEntity itemEntity = new ItemEntity(this.world, x, y, z, stack.copy());
+                this.world.spawnEntity(itemEntity);
+            }
+
+            ((ServerWorld) this.world).spawnParticles(ParticleTypes.POOF,
+                    dropPosition.getX() + 0.5, dropPosition.getY() + 1.3, dropPosition.getZ() + 0.5, 3, 0, 0, 0, 0.02);
+            this.world.playSound(null, dropPosition, SoundEvents.ENTITY_ITEM_PICKUP,
+                    this.hoeEntity.getSoundCategory(), 0.5F, 1.0F);
         }
     }
 
@@ -328,7 +401,7 @@ public class WoodenHoeHarvestAndDeliverCropGoal extends Goal
                 // Spawn the item entity in the world, effectively "throwing" it towards the player.
                 this.world.spawnEntity(itemEntity);
 
-                // Optionally, play a sound effect to signal the delivery (e.g., item pickup sound).
+                // Play a sound effect to signal the delivery
                 this.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_ITEM_PICKUP, player.getSoundCategory(), 1.0F, 1.0F);
             }
             // Clear the itemsToDeliver list after all items have been "thrown" towards the player.
@@ -340,14 +413,11 @@ public class WoodenHoeHarvestAndDeliverCropGoal extends Goal
 
     private BlockPos findNearestChest()
     {
+        // Updated to use chestSightRange for finding the nearest chest
         BlockPos entityPos = this.hoeEntity.getBlockPos();
-        // A 15-block range check for chests
-        for (int x = -15; x <= 15; x++)
-        {
-            for (int y = -15; y <= 15; y++)
-            {
-                for (int z = -15; z <= 15; z++)
-                {
+        for (int x = -chestSightRange; x <= chestSightRange; x++) {
+            for (int y = -chestSightRange; y <= chestSightRange; y++) {
+                for (int z = -chestSightRange; z <= chestSightRange; z++) {
                     BlockPos blockPos = entityPos.add(x, y, z);
                     BlockState state = this.world.getBlockState(blockPos);
                     if (state.getBlock() instanceof ChestBlock) { return blockPos; }

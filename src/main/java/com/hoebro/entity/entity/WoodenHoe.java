@@ -1,6 +1,6 @@
 package com.hoebro.entity.entity;
 
-import com.hoebro.entity.ai.WoodenHoeHarvestAndDeliverCropGoal;
+import com.hoebro.entity.ai.HoeHarvestAndDeliverGoal;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -10,9 +10,10 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.AmbientEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
@@ -24,13 +25,13 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 
-public class WoodenHoe extends AmbientEntity
+public class WoodenHoe extends PathAwareEntity
 {
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
     private boolean deliverToChestMode = false;
 
-    public WoodenHoe(EntityType<? extends AmbientEntity> entityType, World world)
+    public WoodenHoe(EntityType<? extends PathAwareEntity> entityType, World world)
     {
         super(entityType, world);
     }
@@ -95,6 +96,22 @@ public class WoodenHoe extends AmbientEntity
     }
 
     @Override
+    public void writeCustomDataToNbt(NbtCompound nbt)
+    {
+        super.writeCustomDataToNbt(nbt);
+        // Save the delivery mode to the NBT data
+        nbt.putBoolean("DeliverToChestMode", this.deliverToChestMode);
+    }
+
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt)
+    {
+        super.readCustomDataFromNbt(nbt);
+        // Read the delivery mode from the NBT data
+        this.deliverToChestMode = nbt.getBoolean("DeliverToChestMode");
+    }
+
+    @Override
     public void tick()
     {
         super.tick();
@@ -104,11 +121,13 @@ public class WoodenHoe extends AmbientEntity
     @Override
     protected void initGoals()
     {
+        super.initGoals();
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new WoodenHoeHarvestAndDeliverCropGoal(this, 1.3f, 15));
-        this.goalSelector.add(5, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
-        this.goalSelector.add(6, new LookAroundGoal(this));
+        this.goalSelector.add(1, new HoeHarvestAndDeliverGoal(this, 1.2f, 7, 7));
+        this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
+        this.goalSelector.add(3, new LookAroundGoal(this));
     }
+
 
     public static DefaultAttributeContainer.Builder createWoodenHoeAttributes()
     {
@@ -116,6 +135,14 @@ public class WoodenHoe extends AmbientEntity
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 6)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f)
                 .add(EntityAttributes.GENERIC_ARMOR, 0.5f);
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound()
+    {
+        this.playSound(SoundEvents.ENTITY_WITHER_SKELETON_AMBIENT, 1.0F, 2.2F);
+        return null;
     }
 
     @Nullable

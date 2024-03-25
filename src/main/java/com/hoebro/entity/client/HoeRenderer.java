@@ -8,20 +8,17 @@ import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
-public class WoodenHoeRenderer extends MobEntityRenderer<WoodenHoe, HoeModel<WoodenHoe>>
+public class HoeRenderer extends MobEntityRenderer<WoodenHoe, HoeModel<WoodenHoe>>
 {
     private static final Identifier TEXTURE = new Identifier(HoeBro.MOD_ID, "textures/entity/wooden_hoe.png");
 
-    public WoodenHoeRenderer(EntityRendererFactory.Context context)
+    public HoeRenderer(EntityRendererFactory.Context context)
     {
         super(context, new HoeModel<>(context.getPart(HoeBroModelLayers.WOODENHOE)), 0.6f);
     }
 
     @Override
-    public Identifier getTexture(WoodenHoe entity)
-    {
-        return TEXTURE;
-    }
+    public Identifier getTexture(WoodenHoe entity) { return TEXTURE; }
 
     @Override
     public void render(WoodenHoe mobEntity, float f, float g, MatrixStack matrixStack,
