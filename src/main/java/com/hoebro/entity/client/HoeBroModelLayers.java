@@ -8,4 +8,7 @@ public class HoeBroModelLayers
 {
     public static final EntityModelLayer WOODENHOE =
             new EntityModelLayer(new Identifier(HoeBro.MOD_ID, "woodenhoe"), "main");
+
+    public static final EntityModelLayer STONEHOE =
+            new EntityModelLayer(new Identifier(HoeBro.MOD_ID, "stonehoe"), "main");
 }

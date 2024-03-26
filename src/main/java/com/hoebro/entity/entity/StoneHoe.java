@@ -1,6 +1,6 @@
 package com.hoebro.entity.entity;
 
-import com.hoebro.entity.ai.WoodenHoeAI;
+import com.hoebro.entity.ai.StoneHoeAI;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -25,13 +25,13 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 
-public class WoodenHoe extends PathAwareEntity
+public class StoneHoe extends PathAwareEntity
 {
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
     private boolean deliverToChestMode = false;
 
-    public WoodenHoe(EntityType<? extends PathAwareEntity> entityType, World world)
+    public StoneHoe(EntityType<? extends PathAwareEntity> entityType, World world)
     {
         super(entityType, world);
     }
@@ -123,7 +123,7 @@ public class WoodenHoe extends PathAwareEntity
     {
         super.initGoals();
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new WoodenHoeAI(this, 1.1f, 6, 6, 30));
+        this.goalSelector.add(1, new StoneHoeAI(this, 1.3f, 8, 8, 66));
         this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
         this.goalSelector.add(3, new LookAroundGoal(this));
     }
@@ -132,7 +132,7 @@ public class WoodenHoe extends PathAwareEntity
     public static DefaultAttributeContainer.Builder createWoodenHoeAttributes()
     {
         return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 6)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 10)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f)
                 .add(EntityAttributes.GENERIC_ARMOR, 0.5f);
     }

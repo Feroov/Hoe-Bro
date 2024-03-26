@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": {
+      "item": "minecraft:cobblestone"
+    },
+    "E": {
+      "item": "hoebro:wooden_hoe_spawn_egg"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "SES",
+    "SSS"
+  ],
+  "result": {
+    "item": "hoebro:stone_hoe_spawn_egg"
+  }
+}

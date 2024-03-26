@@ -1,15 +1,15 @@
 package com.hoebro.entity.ai;
 
-import com.hoebro.entity.entity.WoodenHoe;
+import com.hoebro.entity.entity.StoneHoe;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.CropBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -23,9 +23,9 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HoeHarvestAndDeliverGoal extends Goal
+public class StoneHoeAI extends Goal
 {
-    private final WoodenHoe hoeEntity;
+    private final StoneHoe hoeEntity;
     private final World world;
     private final List<ItemStack> itemsToDeliver = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class HoeHarvestAndDeliverGoal extends Goal
 
     private enum State { SEARCHING, MOVING_TO_CHEST, DEPOSITING_IN_CHEST, MOVING_TO_PLAYER }
 
-    public HoeHarvestAndDeliverGoal(WoodenHoe hoeEntity, double speed, int sightRange, int chestSightRange, int durability)
+    public StoneHoeAI(StoneHoe hoeEntity, double speed, int sightRange, int chestSightRange, int durability)
     {
         this.hoeEntity = hoeEntity;
         this.world = hoeEntity.getWorld();
@@ -147,7 +147,7 @@ public class HoeHarvestAndDeliverGoal extends Goal
             // Move towards the player.
             this.hoeEntity.getNavigation().startMovingTo(nearestPlayer, this.speed);
 
-            // Check if the WoodenHoe entity is close enough to the player to deliver the items.
+            // Check if the StoneHoe entity is close enough to the player to deliver the items.
             if (this.hoeEntity.squaredDistanceTo(nearestPlayer) < 4.0)
             {
                 // Deliver items to player.
@@ -386,7 +386,7 @@ public class HoeHarvestAndDeliverGoal extends Goal
             // Loop through each item in the itemsToDeliver list.
             for (ItemStack stack : new ArrayList<>(itemsToDeliver))
             {
-                // Create a new ItemEntity at the WoodenHoe entity's location with the item stack.
+                // Create a new ItemEntity at the StoneHoe entity's location with the item stack.
                 ItemEntity itemEntity = new ItemEntity(this.world, this.hoeEntity.getX(), this.hoeEntity.getY(), this.hoeEntity.getZ(), stack);
 
                 // Calculate the direction vector to throw the item towards the player.
