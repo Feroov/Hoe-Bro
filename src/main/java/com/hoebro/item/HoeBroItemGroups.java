@@ -15,7 +15,9 @@ public class HoeBroItemGroups
     public static final ItemGroup HOEBRO_GROUP = Registry.register(Registries.ITEM_GROUP, new Identifier(HoeBro.MOD_ID,
             "hoebrogroup"), FabricItemGroup.builder().displayName(Text.translatable("itemgroup.hoebro"))
             .icon(() -> new ItemStack(Items.WOODEN_HOE)).entries((displayContext, entries) ->
-            { entries.add(HoeBroItems.WOODEN_HOE_SPAWN_EGG);}).build());
+            {
+                entries.add(HoeBroItems.WOODEN_HOE_SPAWN_EGG);
+            }).build());
 
     public static void registerItemGroups() { HoeBro.LOGGER.info("Registering Item Groups for " + HoeBro.MOD_ID); }
 }
