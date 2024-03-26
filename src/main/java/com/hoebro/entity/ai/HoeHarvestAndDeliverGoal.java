@@ -26,35 +26,34 @@ import java.util.List;
 public class HoeHarvestAndDeliverGoal extends Goal
 {
     private final WoodenHoe hoeEntity;
-    private PlayerEntity nearestPlayer;
-    private BlockPos targetCropPos;
     private final World world;
-    private final double speed;
-    private boolean isDelivering = false;
     private final List<ItemStack> itemsToDeliver = new ArrayList<>();
+
+    private final int durability;
     private final int sightRange;
+    private final int chestSightRange;
+    private final double speed;
+
     private int harvestedCrops = 0;
-    private final int maxHarvestBeforeDeath = 30;
-    private enum State
-    {
-        SEARCHING,
-        MOVING_TO_CHEST,
-        DEPOSITING_IN_CHEST,
-        MOVING_TO_PLAYER
-    }
+    private int ticksStuck = 0;
+    private boolean isDelivering = false;
+
+    private PlayerEntity nearestPlayer;
     private State currentState = State.SEARCHING;
+    private BlockPos targetCropPos;
     private BlockPos nearestChestPos = null;
     private BlockPos lastPos = null;
-    private int ticksStuck = 0;
-    private final int chestSightRange;
 
-    public HoeHarvestAndDeliverGoal(WoodenHoe hoeEntity, double speed, int sightRange, int chestSightRange)
+    private enum State { SEARCHING, MOVING_TO_CHEST, DEPOSITING_IN_CHEST, MOVING_TO_PLAYER }
+
+    public HoeHarvestAndDeliverGoal(WoodenHoe hoeEntity, double speed, int sightRange, int chestSightRange, int durability)
     {
         this.hoeEntity = hoeEntity;
         this.world = hoeEntity.getWorld();
         this.speed = speed;
         this.sightRange = sightRange;
         this.chestSightRange = chestSightRange;
+        this.durability = durability;
     }
 
     @Override
@@ -142,7 +141,7 @@ public class HoeHarvestAndDeliverGoal extends Goal
 
     private void moveToPlayer()
     {
-        // Ensure there is a nearest player to deliver items to.
+        // Ensure there is the nearest player to deliver items to.
         if (nearestPlayer != null)
         {
             // Move towards the player.
@@ -216,9 +215,8 @@ public class HoeHarvestAndDeliverGoal extends Goal
     private void depositItemsInChest()
     {
         BlockEntity chestEntity = this.world.getBlockEntity(nearestChestPos);
-        if (chestEntity instanceof ChestBlockEntity)
+        if (chestEntity instanceof ChestBlockEntity chest)
         {
-            ChestBlockEntity chest = (ChestBlockEntity) chestEntity;
             boolean allSlotsFull = true;
 
             for (ItemStack stack : new ArrayList<>(itemsToDeliver))
@@ -316,6 +314,7 @@ public class HoeHarvestAndDeliverGoal extends Goal
         }
     }
 
+
     private void harvestCrop(BlockPos cropPos)
     {
         if (this.world instanceof ServerWorld)
@@ -333,7 +332,7 @@ public class HoeHarvestAndDeliverGoal extends Goal
                     this.isDelivering = true;
 
                     harvestedCrops++;
-                    if (harvestedCrops >= maxHarvestBeforeDeath)
+                    if (harvestedCrops >= durability)
                     {
                         DamageSources damageSources = this.world.getDamageSources();
                         DamageSource genericDamage = damageSources.generic();
@@ -379,6 +378,7 @@ public class HoeHarvestAndDeliverGoal extends Goal
         return drops;
     }
 
+
     private void deliverToPlayer(PlayerEntity player)
     {
         if (!this.world.isClient)
@@ -415,9 +415,12 @@ public class HoeHarvestAndDeliverGoal extends Goal
     {
         // Updated to use chestSightRange for finding the nearest chest
         BlockPos entityPos = this.hoeEntity.getBlockPos();
-        for (int x = -chestSightRange; x <= chestSightRange; x++) {
-            for (int y = -chestSightRange; y <= chestSightRange; y++) {
-                for (int z = -chestSightRange; z <= chestSightRange; z++) {
+        for (int x = -chestSightRange; x <= chestSightRange; x++)
+        {
+            for (int y = -chestSightRange; y <= chestSightRange; y++)
+            {
+                for (int z = -chestSightRange; z <= chestSightRange; z++)
+                {
                     BlockPos blockPos = entityPos.add(x, y, z);
                     BlockState state = this.world.getBlockState(blockPos);
                     if (state.getBlock() instanceof ChestBlock) { return blockPos; }
