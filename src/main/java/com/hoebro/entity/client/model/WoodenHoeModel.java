@@ -1,4 +1,4 @@
-package com.hoebro.entity.client;
+package com.hoebro.entity.client.model;
 
 import com.hoebro.entity.animation.HoeBroAnimations;
 import com.hoebro.entity.entity.WoodenHoe;
@@ -7,12 +7,12 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class HoeModel<T extends WoodenHoe> extends SinglePartEntityModel<T>
+public class WoodenHoeModel<T extends WoodenHoe> extends SinglePartEntityModel<T>
 {
     private final ModelPart woodenhoe;
     private final ModelPart upperbody;
 
-    public HoeModel(ModelPart root)
+    public WoodenHoeModel(ModelPart root)
     {
         this.woodenhoe = root.getChild("woodenhoe");
         this.upperbody = woodenhoe.getChild("body").getChild("upperbody");
@@ -118,10 +118,11 @@ public class HoeModel<T extends WoodenHoe> extends SinglePartEntityModel<T>
     }
 
     @Override
-    public void setAngles(WoodenHoe entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setAngles(WoodenHoe entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
+    {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
 
-        this.animateMovement(HoeBroAnimations.WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
+        this.animateMovement(HoeBroAnimations.WOOD_WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
         this.updateAnimation(entity.idleAnimationState, HoeBroAnimations.IDLE, ageInTicks, 1f);
     }
 
@@ -129,7 +130,8 @@ public class HoeModel<T extends WoodenHoe> extends SinglePartEntityModel<T>
     public ModelPart getPart() { return woodenhoe; }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha) {
+    public void render(MatrixStack matrices, VertexConsumer vertexConsumer, int light, int overlay, float red, float green, float blue, float alpha)
+    {
         woodenhoe.render(matrices, vertexConsumer, light, overlay, red, green, blue, alpha);
     }
 }

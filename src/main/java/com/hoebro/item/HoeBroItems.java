@@ -11,9 +11,13 @@ import net.minecraft.util.Identifier;
 
 public class HoeBroItems
 {
+    public static final Item HOEBRO_ICON = registerItem("hoebro_icon", new Item(new FabricItemSettings()));
 
     public static final Item WOODEN_HOE_SPAWN_EGG = registerItem("wooden_hoe_spawn_egg",
             new SpawnEggItem(HoeBroEntities.WOODENHOE, 0x6b511f, 0x20180a, new FabricItemSettings()));
+
+    public static final Item STONE_HOE_SPAWN_EGG = registerItem("stone_hoe_spawn_egg",
+            new SpawnEggItem(HoeBroEntities.STONEHOE, 0x9a9a9a, 0x494949, new FabricItemSettings()));
 
     private static Item registerItem(String name, Item item)
     {
