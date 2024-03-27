@@ -17,6 +17,7 @@ public class WoodenHoeModel<T extends WoodenHoe> extends SinglePartEntityModel<T
         this.woodenhoe = root.getChild("woodenhoe");
         this.upperbody = woodenhoe.getChild("body").getChild("upperbody");
     }
+
     public static TexturedModelData getTexturedModelData()
     {
         ModelData modelData = new ModelData();

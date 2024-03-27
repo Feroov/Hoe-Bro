@@ -19,6 +19,13 @@ public class HoeBroItems
     public static final Item STONE_HOE_SPAWN_EGG = registerItem("stone_hoe_spawn_egg",
             new SpawnEggItem(HoeBroEntities.STONEHOE, 0x9a9a9a, 0x494949, new FabricItemSettings()));
 
+    public static final Item IRON_HOE_SPAWN_EGG = registerItem("iron_hoe_spawn_egg",
+            new SpawnEggItem(HoeBroEntities.IRONHOE, 0xffffff, 0xd8d8d8, new FabricItemSettings()));
+
+    public static final Item GOLDEN_HOE_SPAWN_EGG = registerItem("golden_hoe_spawn_egg",
+            new SpawnEggItem(HoeBroEntities.GOLDENHOE, 0xeaee57, 0xe9b115, new FabricItemSettings()));
+
+
     private static Item registerItem(String name, Item item)
     {
         return Registry.register(Registries.ITEM, new Identifier(HoeBro.MOD_ID, name), item);
