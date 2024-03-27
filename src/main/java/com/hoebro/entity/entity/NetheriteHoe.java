@@ -1,6 +1,7 @@
 package com.hoebro.entity.entity;
 
-import com.hoebro.entity.ai.GoldenHoeAI;
+
+import com.hoebro.entity.ai.NetheriteHoeAI;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -25,13 +26,13 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 
-public class GoldenHoe extends PathAwareEntity
+public class NetheriteHoe extends PathAwareEntity
 {
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
     private boolean deliverToChestMode = false;
 
-    public GoldenHoe(EntityType<? extends PathAwareEntity> entityType, World world)
+    public NetheriteHoe(EntityType<? extends PathAwareEntity> entityType, World world)
     {
         super(entityType, world);
     }
@@ -123,7 +124,7 @@ public class GoldenHoe extends PathAwareEntity
     {
         super.initGoals();
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new GoldenHoeAI(this, 1.45f, 19, 19, 350));
+        this.goalSelector.add(1, new NetheriteHoeAI(this, 1.8f, 30, 30, 960));
         this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
         this.goalSelector.add(3, new LookAroundGoal(this));
     }
@@ -131,7 +132,7 @@ public class GoldenHoe extends PathAwareEntity
     public static DefaultAttributeContainer.Builder createAttributes()
     {
         return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 12)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 15)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f)
                 .add(EntityAttributes.GENERIC_ARMOR, 0.5f);
     }

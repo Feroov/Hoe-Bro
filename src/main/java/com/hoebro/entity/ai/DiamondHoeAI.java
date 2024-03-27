@@ -1,6 +1,6 @@
 package com.hoebro.entity.ai;
 
-import com.hoebro.entity.entity.GoldenHoe;
+import com.hoebro.entity.entity.DiamondHoe;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -23,9 +23,9 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GoldenHoeAI extends Goal
+public class DiamondHoeAI extends Goal
 {
-    private final GoldenHoe hoeEntity;
+    private final DiamondHoe hoeEntity;
     private final World world;
     private final List<ItemStack> itemsToDeliver = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class GoldenHoeAI extends Goal
 
     private enum State { SEARCHING, MOVING_TO_CHEST, DEPOSITING_IN_CHEST, MOVING_TO_PLAYER }
 
-    public GoldenHoeAI(GoldenHoe hoeEntity, double speed, int sightRange, int chestSightRange, int durability)
+    public DiamondHoeAI(DiamondHoe hoeEntity, double speed, int sightRange, int chestSightRange, int durability)
     {
         this.hoeEntity = hoeEntity;
         this.world = hoeEntity.getWorld();
@@ -147,7 +147,7 @@ public class GoldenHoeAI extends Goal
             // Move towards the player.
             this.hoeEntity.getNavigation().startMovingTo(nearestPlayer, this.speed);
 
-            // Check if the GoldenHoe entity is close enough to the player to deliver the items.
+            // Check if the DiamondHoe entity is close enough to the player to deliver the items.
             if (this.hoeEntity.squaredDistanceTo(nearestPlayer) < 4.0)
             {
                 // Deliver items to player.
@@ -376,7 +376,6 @@ public class GoldenHoeAI extends Goal
         return drops;
     }
 
-
     private void deliverToPlayer(PlayerEntity player)
     {
         if (!this.world.isClient)
@@ -384,7 +383,7 @@ public class GoldenHoeAI extends Goal
             // Loop through each item in the itemsToDeliver list.
             for (ItemStack stack : new ArrayList<>(itemsToDeliver))
             {
-                // Create a new ItemEntity at the GoldenHoe entity's location with the item stack.
+                // Create a new ItemEntity at the DiamondHoe entity's location with the item stack.
                 ItemEntity itemEntity = new ItemEntity(this.world, this.hoeEntity.getX(), this.hoeEntity.getY(), this.hoeEntity.getZ(), stack);
 
                 // Calculate the direction vector to throw the item towards the player.

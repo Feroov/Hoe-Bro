@@ -292,7 +292,6 @@ public class StoneHoeAI extends Goal
                 this.hoeEntity.getSoundCategory(), 0.5F, 1.0F);
     }
 
-
     private void forceDropItem(ItemStack stack, BlockPos dropPosition)
     {
         if (this.world instanceof ServerWorld)
@@ -313,7 +312,6 @@ public class StoneHoeAI extends Goal
                     this.hoeEntity.getSoundCategory(), 0.5F, 1.0F);
         }
     }
-
 
     private void harvestCrop(BlockPos cropPos)
     {
@@ -377,7 +375,6 @@ public class StoneHoeAI extends Goal
         }
         return drops;
     }
-
 
     private void deliverToPlayer(PlayerEntity player)
     {

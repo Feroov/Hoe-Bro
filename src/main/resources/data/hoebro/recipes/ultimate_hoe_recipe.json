@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "minecraft:egg"
+    },
+    "W": {
+      "item": "hoebro:wooden_hoe_spawn_egg"
+    },
+    "S": {
+      "item": "hoebro:stone_hoe_spawn_egg"
+    },
+    "I": {
+      "item": "hoebro:iron_hoe_spawn_egg"
+    },
+    "G": {
+      "item": "hoebro:golden_hoe_spawn_egg"
+    },
+    "D": {
+      "item": "hoebro:diamond_hoe_spawn_egg"
+    },
+    "N": {
+      "item": "hoebro:netherite_hoe_spawn_egg"
+    }
+  },
+  "pattern": [
+    "WSI",
+    "EEE",
+    "GDN"
+  ],
+  "result": {
+    "item": "hoebro:ultimate_hoe_spawn_egg"
+  }
+}

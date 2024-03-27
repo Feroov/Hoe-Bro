@@ -25,6 +25,14 @@ public class HoeBroItems
     public static final Item GOLDEN_HOE_SPAWN_EGG = registerItem("golden_hoe_spawn_egg",
             new SpawnEggItem(HoeBroEntities.GOLDENHOE, 0xeaee57, 0xe9b115, new FabricItemSettings()));
 
+    public static final Item DIAMOND_HOE_SPAWN_EGG = registerItem("diamond_hoe_spawn_egg",
+            new SpawnEggItem(HoeBroEntities.DIAMONDHOE, 0x33ebcb, 0x27b29a, new FabricItemSettings()));
+
+    public static final Item NETHETIRE_HOE_SPAWN_EGG = registerItem("netherite_hoe_spawn_egg",
+            new SpawnEggItem(HoeBroEntities.NETHERITEHOE, 0x867b86, 0x5d565d, new FabricItemSettings()));
+
+    public static final Item ULTIMATE_HOE_SPAWN_EGG = registerItem("ultimate_hoe_spawn_egg",
+            new SpawnEggItem(HoeBroEntities.ULTIMATEHOE, 0xff1f45, 0xd90025, new FabricItemSettings()));
 
     private static Item registerItem(String name, Item item)
     {

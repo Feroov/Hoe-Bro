@@ -1,9 +1,7 @@
 package com.hoebro;
 
 import com.hoebro.entity.HoeBroEntities;
-import com.hoebro.entity.entity.GoldenHoe;
-import com.hoebro.entity.entity.StoneHoe;
-import com.hoebro.entity.entity.WoodenHoe;
+import com.hoebro.entity.entity.*;
 import com.hoebro.item.HoeBroItemGroups;
 import com.hoebro.item.HoeBroItems;
 import net.fabricmc.api.ModInitializer;
@@ -25,7 +23,10 @@ public class HoeBro implements ModInitializer
 		HoeBroEntities.registerModEntities();
 		FabricDefaultAttributeRegistry.register(HoeBroEntities.WOODENHOE, WoodenHoe.createAttributes());
 		FabricDefaultAttributeRegistry.register(HoeBroEntities.STONEHOE, StoneHoe.createAttributes());
-		FabricDefaultAttributeRegistry.register(HoeBroEntities.IRONHOE, StoneHoe.createAttributes());
+		FabricDefaultAttributeRegistry.register(HoeBroEntities.IRONHOE, IronHoe.createAttributes());
 		FabricDefaultAttributeRegistry.register(HoeBroEntities.GOLDENHOE, GoldenHoe.createAttributes());
+		FabricDefaultAttributeRegistry.register(HoeBroEntities.DIAMONDHOE, DiamondHoe.createAttributes());
+		FabricDefaultAttributeRegistry.register(HoeBroEntities.NETHERITEHOE, NetheriteHoe.createAttributes());
+		FabricDefaultAttributeRegistry.register(HoeBroEntities.ULTIMATEHOE, UltimateHoe.createAttributes());
 	}
 }
