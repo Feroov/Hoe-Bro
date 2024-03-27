@@ -11,4 +11,11 @@ public class HoeBroModelLayers
 
     public static final EntityModelLayer STONEHOE =
             new EntityModelLayer(new Identifier(HoeBro.MOD_ID, "stonehoe"), "main");
+
+    public static final EntityModelLayer IRONHOE =
+            new EntityModelLayer(new Identifier(HoeBro.MOD_ID, "ironhoe"), "main");
+
+
+    public static final EntityModelLayer GOLDENHOE =
+            new EntityModelLayer(new Identifier(HoeBro.MOD_ID, "goldenhoe"), "main");
 }

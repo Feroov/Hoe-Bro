@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": {
+      "item": "minecraft:gold_ingot"
+    },
+    "E": {
+      "item": "hoebro:iron_hoe_spawn_egg"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "SES",
+    "SSS"
+  ],
+  "result": {
+    "item": "hoebro:golden_hoe_spawn_egg"
+  }
+}

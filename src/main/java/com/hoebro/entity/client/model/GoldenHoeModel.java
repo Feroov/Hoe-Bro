@@ -1,25 +1,23 @@
 package com.hoebro.entity.client.model;
 
 import com.hoebro.entity.animation.HoeBroAnimations;
-import com.hoebro.entity.entity.StoneHoe;
+import com.hoebro.entity.entity.GoldenHoe;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class StoneHoeModel<T extends StoneHoe> extends SinglePartEntityModel<T>
+public class GoldenHoeModel<T extends GoldenHoe> extends SinglePartEntityModel<T>
 {
     private final ModelPart stonehoe;
     private final ModelPart upperbody;
 
-    public StoneHoeModel(ModelPart root)
+    public GoldenHoeModel(ModelPart root)
     {
         this.stonehoe = root.getChild("stonehoe");
         this.upperbody = stonehoe.getChild("upperbody");
     }
-
-    public static TexturedModelData getTexturedModelData()
-    {
+    public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData stonehoe = modelPartData.addChild("stonehoe", ModelPartBuilder.create(), ModelTransform.pivot(0.0F, 24.6F, 0.0F));
@@ -117,7 +115,7 @@ public class StoneHoeModel<T extends StoneHoe> extends SinglePartEntityModel<T>
     }
 
     @Override
-    public void setAngles(StoneHoe entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
+    public void setAngles(GoldenHoe entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
     {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
 

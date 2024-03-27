@@ -4,7 +4,6 @@ import com.hoebro.HoeBro;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
@@ -18,6 +17,8 @@ public class HoeBroItemGroups
             {
                 entries.add(HoeBroItems.WOODEN_HOE_SPAWN_EGG);
                 entries.add(HoeBroItems.STONE_HOE_SPAWN_EGG);
+                entries.add(HoeBroItems.IRON_HOE_SPAWN_EGG);
+                entries.add(HoeBroItems.GOLDEN_HOE_SPAWN_EGG);
             }).build());
 
     public static void registerItemGroups() { HoeBro.LOGGER.info("Registering Item Groups for " + HoeBro.MOD_ID); }

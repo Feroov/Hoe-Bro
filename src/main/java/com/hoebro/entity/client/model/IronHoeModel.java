@@ -1,18 +1,18 @@
 package com.hoebro.entity.client.model;
 
 import com.hoebro.entity.animation.HoeBroAnimations;
-import com.hoebro.entity.entity.StoneHoe;
+import com.hoebro.entity.entity.IronHoe;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class StoneHoeModel<T extends StoneHoe> extends SinglePartEntityModel<T>
+public class IronHoeModel<T extends IronHoe> extends SinglePartEntityModel<T>
 {
     private final ModelPart stonehoe;
     private final ModelPart upperbody;
 
-    public StoneHoeModel(ModelPart root)
+    public IronHoeModel(ModelPart root)
     {
         this.stonehoe = root.getChild("stonehoe");
         this.upperbody = stonehoe.getChild("upperbody");
@@ -117,7 +117,7 @@ public class StoneHoeModel<T extends StoneHoe> extends SinglePartEntityModel<T>
     }
 
     @Override
-    public void setAngles(StoneHoe entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
+    public void setAngles(IronHoe entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
     {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
 
