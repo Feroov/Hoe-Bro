@@ -123,11 +123,10 @@ public class WoodenHoe extends PathAwareEntity
     {
         super.initGoals();
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new WoodenHoeAI(this, 1.1f, 6, 6, 30));
+        this.goalSelector.add(1, new WoodenHoeAI(this, 1.15f, 6, 6, 30));
         this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 4f));
         this.goalSelector.add(3, new LookAroundGoal(this));
     }
-
 
     public static DefaultAttributeContainer.Builder createAttributes()
     {
@@ -136,7 +135,6 @@ public class WoodenHoe extends PathAwareEntity
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f)
                 .add(EntityAttributes.GENERIC_ARMOR, 0.5f);
     }
-
 
     @Nullable
     @Override

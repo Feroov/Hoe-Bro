@@ -25,6 +25,9 @@ public class HoeBroModelProvider extends FabricModelProvider
         itemModelGenerator.register(HoeBroItems.STONE_HOE_SPAWN_EGG, new Model(Optional.of(new Identifier("item/template_spawn_egg")), Optional.empty()));
         itemModelGenerator.register(HoeBroItems.IRON_HOE_SPAWN_EGG, new Model(Optional.of(new Identifier("item/template_spawn_egg")), Optional.empty()));
         itemModelGenerator.register(HoeBroItems.GOLDEN_HOE_SPAWN_EGG, new Model(Optional.of(new Identifier("item/template_spawn_egg")), Optional.empty()));
+        itemModelGenerator.register(HoeBroItems.DIAMOND_HOE_SPAWN_EGG, new Model(Optional.of(new Identifier("item/template_spawn_egg")), Optional.empty()));
+        itemModelGenerator.register(HoeBroItems.NETHETIRE_HOE_SPAWN_EGG, new Model(Optional.of(new Identifier("item/template_spawn_egg")), Optional.empty()));
+        itemModelGenerator.register(HoeBroItems.ULTIMATE_HOE_SPAWN_EGG, new Model(Optional.of(new Identifier("item/template_spawn_egg")), Optional.empty()));
 
         itemModelGenerator.register(HoeBroItems.HOEBRO_ICON, Models.GENERATED);
     }

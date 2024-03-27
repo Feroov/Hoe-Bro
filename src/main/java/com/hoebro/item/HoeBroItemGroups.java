@@ -19,6 +19,9 @@ public class HoeBroItemGroups
                 entries.add(HoeBroItems.STONE_HOE_SPAWN_EGG);
                 entries.add(HoeBroItems.IRON_HOE_SPAWN_EGG);
                 entries.add(HoeBroItems.GOLDEN_HOE_SPAWN_EGG);
+                entries.add(HoeBroItems.DIAMOND_HOE_SPAWN_EGG);
+                entries.add(HoeBroItems.NETHETIRE_HOE_SPAWN_EGG);
+                entries.add(HoeBroItems.ULTIMATE_HOE_SPAWN_EGG);
             }).build());
 
     public static void registerItemGroups() { HoeBro.LOGGER.info("Registering Item Groups for " + HoeBro.MOD_ID); }

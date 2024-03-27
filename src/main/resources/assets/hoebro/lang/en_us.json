@@ -3,6 +3,9 @@
   "item.hoebro.stone_hoe_spawn_egg": "Stone Hoe Spawn Egg",
   "item.hoebro.iron_hoe_spawn_egg": "Iron Hoe Spawn Egg",
   "item.hoebro.golden_hoe_spawn_egg": "Golden Hoe Spawn Egg",
+  "item.hoebro.diamond_hoe_spawn_egg": "Diamond Hoe Spawn Egg",
+  "item.hoebro.netherite_hoe_spawn_egg": "Netherite Hoe Spawn Egg",
+  "item.hoebro.ultimate_hoe_spawn_egg": "Ultimate Hoe Spawn Egg",
   "item.hoebro.hoebro_icon": "Hoe Bro icon",
 
   "itemgroup.hoebro": "Hoe Bros"
