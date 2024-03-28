@@ -4,6 +4,7 @@ import com.hoebro.entity.HoeBroEntities;
 import com.hoebro.entity.entity.*;
 import com.hoebro.item.HoeBroItemGroups;
 import com.hoebro.item.HoeBroItems;
+import com.hoebro.particle.HoeBroParticles;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -21,6 +22,7 @@ public class HoeBro implements ModInitializer
 		HoeBroItemGroups.registerItemGroups();
 		HoeBroItems.registerHoeBroItems();
 		HoeBroEntities.registerModEntities();
+		registerParticles();
 		FabricDefaultAttributeRegistry.register(HoeBroEntities.WOODENHOE, WoodenHoe.createAttributes());
 		FabricDefaultAttributeRegistry.register(HoeBroEntities.STONEHOE, StoneHoe.createAttributes());
 		FabricDefaultAttributeRegistry.register(HoeBroEntities.IRONHOE, IronHoe.createAttributes());
@@ -28,5 +30,10 @@ public class HoeBro implements ModInitializer
 		FabricDefaultAttributeRegistry.register(HoeBroEntities.DIAMONDHOE, DiamondHoe.createAttributes());
 		FabricDefaultAttributeRegistry.register(HoeBroEntities.NETHERITEHOE, NetheriteHoe.createAttributes());
 		FabricDefaultAttributeRegistry.register(HoeBroEntities.ULTIMATEHOE, UltimateHoe.createAttributes());
+	}
+
+	private void registerParticles()
+	{
+		Class<HoeBroParticles> particlesClass = HoeBroParticles.class;
 	}
 }

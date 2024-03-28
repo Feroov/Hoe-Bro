@@ -1,6 +1,7 @@
 package com.hoebro.entity.entity;
 
 import com.hoebro.entity.ai.GoldenHoeAI;
+import com.hoebro.particle.HoeBroParticles;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
@@ -58,24 +59,40 @@ public class GoldenHoe extends PathAwareEntity
     public boolean isDeliverToChestMode() { return deliverToChestMode; }
 
     @Override
+    public void onDeath(DamageSource source)
+    {
+        if (!this.getWorld().isClient)
+        {
+            ServerWorld serverWorld = (ServerWorld) this.getWorld();
+            int particleCount = 20;
+            double spiralFactor = 0.1; // Controls the tightness of the spiral
+
+            for (int i = 0; i < particleCount; ++i)
+            {
+                // Calculate angle for each particle to spread them evenly in a spiral
+                double angle = 2 * Math.PI * i / particleCount + spiralFactor * i;
+
+                // Initial velocity - particles scatter outwards in a spiral
+                double velocityX = Math.cos(angle) * spiralFactor;
+                double velocityY = 0.05 * i / particleCount; // Gradual upward movement
+                double velocityZ = Math.sin(angle) * spiralFactor;
+
+                serverWorld.spawnParticles(HoeBroParticles.STICK,
+                        this.getX(), this.getY() + 1.0f, this.getZ(), // Start from a single point
+                        1, // Count of particles to spawn at once
+                        velocityX, velocityY, velocityZ, // Velocity to make them scatter in a spiral
+                        1.0); // Speed, can adjust to control how fast particles move outwards
+            }
+        }
+    }
+
+    @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand)
     {
         if (!this.getWorld().isClient)
         {
             // This check ensures we're on the server side.
             this.deliverToChestMode = !this.deliverToChestMode;
-
-            // Spawn the happy villager particle effect around the entity to notify the player
-            for (int i = 0; i < 10; i++)
-            {
-                double d0 = this.random.nextGaussian() * 0.02D;
-                double d1 = this.random.nextGaussian() * 0.02D;
-                double d2 = this.random.nextGaussian() * 0.02D;
-                // This method call should cause particles to appear on the client side.
-                ((ServerWorld) this.getWorld()).spawnParticles(ParticleTypes.HAPPY_VILLAGER,
-                        this.getX(), this.getBodyY(0.5D), this.getZ(),
-                        1, d0, d1, d2, 0.0D);
-            }
 
             // Play the item pick-up sound to notify the player
             this.getWorld().playSound(null, this.getX(), this.getY(), this.getZ(),
@@ -85,10 +102,24 @@ public class GoldenHoe extends PathAwareEntity
             if (this.deliverToChestMode)
             {
                 player.sendMessage(Text.translatable("Deliver to Chest"), true);
+                double d0 = this.random.nextGaussian() * 0.02D;
+                double d1 = this.random.nextGaussian() * 0.02D;
+                double d2 = this.random.nextGaussian() * 0.02D;
+                // This method call should cause particles to appear on the client side.
+                ((ServerWorld) this.getWorld()).spawnParticles(HoeBroParticles.CHEST,
+                        this.getX(), this.getBodyY(0.6D), this.getZ(),
+                        1, d0, d1, d2, 0.0D);
             }
             else
             {
                 player.sendMessage(Text.translatable("Deliver to Player"), true);
+                double d0 = this.random.nextGaussian() * 0.02D;
+                double d1 = this.random.nextGaussian() * 0.02D;
+                double d2 = this.random.nextGaussian() * 0.02D;
+                // This method call should cause particles to appear on the client side.
+                ((ServerWorld) this.getWorld()).spawnParticles(HoeBroParticles.PLAYER,
+                        this.getX(), this.getBodyY(0.6D), this.getZ(),
+                        1, d0, d1, d2, 0.0D);
             }
             return ActionResult.SUCCESS;
         }

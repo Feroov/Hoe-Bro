@@ -4,7 +4,11 @@ import com.hoebro.entity.HoeBroEntities;
 import com.hoebro.entity.client.HoeBroModelLayers;
 import com.hoebro.entity.client.model.*;
 import com.hoebro.entity.client.renderer.*;
+import com.hoebro.particle.HoePriorityParticle;
+import com.hoebro.particle.HoeBroParticles;
+import com.hoebro.particle.HoeStickParticle;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
@@ -34,5 +38,9 @@ public class HoeBroClient implements ClientModInitializer
         EntityRendererRegistry.register(HoeBroEntities.ULTIMATEHOE, UltimateHoeRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(HoeBroModelLayers.ULTIMATEHOE, UltimateHoeModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(HoeBroModelLayers.HOE_CHARGE, UltimateHoeModel::getTexturedModelData);
+
+        ParticleFactoryRegistry.getInstance().register(HoeBroParticles.CHEST, HoePriorityParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(HoeBroParticles.PLAYER, HoePriorityParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(HoeBroParticles.STICK, HoeStickParticle.Factory::new);
     }
 }
