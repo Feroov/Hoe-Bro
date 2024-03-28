@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "sugar",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "minecraft:wooden_hoe"
+    }
+  ],
+  "result": {
+    "item": "hoebro:hoebro_guide"
+  }
+}

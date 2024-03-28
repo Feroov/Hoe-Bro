@@ -30,5 +30,6 @@ public class HoeBroModelProvider extends FabricModelProvider
         itemModelGenerator.register(HoeBroItems.ULTIMATE_HOE_SPAWN_EGG, new Model(Optional.of(new Identifier("item/template_spawn_egg")), Optional.empty()));
 
         itemModelGenerator.register(HoeBroItems.HOEBRO_ICON, Models.GENERATED);
+        itemModelGenerator.register(HoeBroItems.HOEBRO_GUIDE, Models.GENERATED);
     }
 }

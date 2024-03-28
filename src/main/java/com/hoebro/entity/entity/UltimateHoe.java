@@ -1,6 +1,5 @@
 package com.hoebro.entity.entity;
 
-
 import com.hoebro.entity.ai.UltimateHoeAI;
 import net.minecraft.client.render.entity.feature.SkinOverlayOwner;
 import net.minecraft.entity.AnimationState;
@@ -25,7 +24,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
 
 public class UltimateHoe extends PathAwareEntity implements SkinOverlayOwner
 {
