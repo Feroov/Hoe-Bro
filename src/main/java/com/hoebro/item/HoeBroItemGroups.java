@@ -15,6 +15,7 @@ public class HoeBroItemGroups
             "hoebrogroup"), FabricItemGroup.builder().displayName(Text.translatable("itemgroup.hoebro"))
             .icon(() -> new ItemStack(HoeBroItems.HOEBRO_ICON)).entries((displayContext, entries) ->
             {
+                entries.add(HoeBroItems.HOEBRO_GUIDE);
                 entries.add(HoeBroItems.WOODEN_HOE_SPAWN_EGG);
                 entries.add(HoeBroItems.STONE_HOE_SPAWN_EGG);
                 entries.add(HoeBroItems.IRON_HOE_SPAWN_EGG);

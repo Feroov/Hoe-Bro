@@ -3,7 +3,9 @@ package com.hoebro.item;
 import com.hoebro.HoeBro;
 import com.hoebro.entity.HoeBroEntities;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -11,7 +13,11 @@ import net.minecraft.util.Identifier;
 
 public class HoeBroItems
 {
+
+
     public static final Item HOEBRO_ICON = registerItem("hoebro_icon", new Item(new FabricItemSettings()));
+
+    public static final Item HOEBRO_GUIDE = registerItem("hoebro_guide", new HoeBroGuide(new FabricItemSettings().maxCount(1)));
 
     public static final Item WOODEN_HOE_SPAWN_EGG = registerItem("wooden_hoe_spawn_egg",
             new SpawnEggItem(HoeBroEntities.WOODENHOE, 0x6b511f, 0x20180a, new FabricItemSettings()));
@@ -32,7 +38,8 @@ public class HoeBroItems
             new SpawnEggItem(HoeBroEntities.NETHERITEHOE, 0x867b86, 0x5d565d, new FabricItemSettings()));
 
     public static final Item ULTIMATE_HOE_SPAWN_EGG = registerItem("ultimate_hoe_spawn_egg",
-            new SpawnEggItem(HoeBroEntities.ULTIMATEHOE, 0xff1f45, 0xd90025, new FabricItemSettings()));
+            new SpawnEggItem(HoeBroEntities.ULTIMATEHOE, 0xff1f45, 0xd90025, new FabricItemSettings()) { @Override public boolean hasGlint(ItemStack stack) { return true; }});
+
 
     private static Item registerItem(String name, Item item)
     {
